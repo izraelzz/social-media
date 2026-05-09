@@ -1,65 +1,73 @@
-# SQA Social Media — Testes com Playwright
+# SQA Social Media E2E
 
-## Pré‑requisitos
+Testes Playwright para validar fluxos de interface e endpoints da API.
 
-- Node 18+
+## Visão Geral
 
-## Instalação (primeira vez)
+- `tests/e2e/`: fluxos que acessam o frontend.
+- `tests/api/`: testes diretos contra endpoints da API.
+- `playwright.config.ts`: configuração dos navegadores e execução.
+
+Os testes esperam:
+
+- Frontend em `http://localhost:3000`
+- API em `http://localhost:8080`
+
+## Como Rodar
+
+Pré-requisitos:
+
+- Node.js 18+
+- API rodando
+- Frontend rodando
+
+Instale as dependências:
 
 ```bash
-cd e2e
 npm install
 npx playwright install
 ```
 
-## Estrutura dos testes
-
-```
-e2e/
-└─ tests/
-   ├─ e2e/
-   │  ├─ intro.spec.ts              # smoke da home
-   │  ├─ signup.spec.ts             # fluxo de criar conta
-   └─ api/
-      ├─ posts.spec.ts              # GET /posts
-      └─ auth.spec.ts               # POST /auth/signup
-```
-
-> Smoke test: https://www.techtarget.com/searchsoftwarequality/definition/smoke-testing
-
-## Assumptions/URLs
-
-- Frontend: http://localhost:3000
-- API: http://localhost:8080
-
-## Como executar
+Execute todos os testes:
 
 ```bash
-# Executar todos os testes
 npm test
-
-# Rodar apenas testes E2E
-npm run test:e2e
-
-# Rodar apenas testes de API
-npm run test:api
-
-# Rodar um arquivo ou teste específico (exemplo)
-npx playwright test e2e/signup.spec.ts
-
-# Rodar testes em modo interativo/UI
-npx playwright test --ui
-
-# Rodar testes com visualização do navegador
-npx playwright test --headed
-
-# Executar em modo debug (pausa no breakpoint)
-npx playwright test --debug
 ```
-Veja mais opções e explicações em: https://playwright.dev/docs/running-tests
 
----
+Execute apenas os fluxos de interface:
 
-**Documentação completa:**
+```bash
+npm run test:e2e
+```
 
-- Playwright: https://playwright.dev/docs/intro
+Execute apenas os testes de API:
+
+```bash
+npm run test:api
+```
+
+Modo UI:
+
+```bash
+npx playwright test --ui
+```
+
+Modo com navegador visível:
+
+```bash
+npx playwright test --headed
+```
+
+## Estrutura
+
+```text
+e2e/
+├── tests/api/
+├── tests/e2e/
+├── package.json
+└── playwright.config.ts
+```
+
+## Referência
+
+- [Playwright](https://playwright.dev/docs/intro)

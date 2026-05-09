@@ -1,67 +1,86 @@
-# SQA Social Media - Frontend
+# SQA Social Media Frontend
 
-Interface web desenvolvida em Next.js para gerenciamento de usuários e posts de uma rede social.
+Interface web da aplicação, desenvolvida com Next.js, React e TypeScript.
 
-## 📋 Requisitos do Sistema
+## Visão Geral
 
-- **Node.js**: versão 18 ou superior
-- **npm**: versão 8 ou superior
-- **Backend**: API Spring Boot rodando (veja seção [Conexão com Backend](#conexão-com-backend))
+- Next.js 15
+- React 19
+- TypeScript
+- Axios
+- Jest e Testing Library
 
-## 🚀 Como Clonar e Rodar
+O frontend roda por padrão em `http://localhost:3000` e consome a API em `http://localhost:8080`.
 
-### 1. Clonar o Repositório
+## Como Rodar
+
+Pré-requisitos:
+
+- Node.js 18+
+- npm
+- API rodando em `http://localhost:8080`
+
+Clone o Repositório
 
 ```bash
 git clone <url-do-repositorio>
 cd client
 ```
 
-### 2. Instalar Dependências
+Instale as dependências:
 
 ```bash
 npm install
 ```
 
-### 3. Configurar Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` em `client/`:
 
 ```env
 NEXT_PUBLIC_BASE_URL=http://localhost:8080
 ```
 
-> ⚠️ **Importante**: A variável `NEXT_PUBLIC_BASE_URL` deve apontar para a URL do backend.
-
-### 4. Rodar o Projeto
+Execute em modo desenvolvimento:
 
 ```bash
-# Modo desenvolvimento
 npm run dev
+```
 
-# Build de produção
+Build de produção:
+
+```bash
 npm run build
-
-# Rodar build de produção
 npm start
 ```
 
-Acesse: **http://localhost:3000**
-
-## 🧪 Executar Testes
+## Testes
 
 ```bash
-# Rodar todos os testes
 npm test
+```
 
-# Rodar testes em modo watch (reexecuta ao salvar)
+Modo watch:
+
+```bash
 npm run test:watch
+```
 
-# Rodar testes com relatório de cobertura
+Coverage:
+
+```bash
 npm run test:coverage
 ```
 
-## 📁 Organização de Pastas
+O Jest está configurado para gerar coverage em `coverage/`. Essa pasta é local e fica fora do Git.
+
+## Rotas
+
+- `/`: feed de posts
+- `/signup`: cadastro
+- `/signin`: login
+- `/reset-password`: recuperação de senha
+- `/auth/liked`: posts curtidos
+
+## Estrutura
 
 ```
 client/
@@ -112,117 +131,12 @@ client/
 └── tsconfig.json                # Configuração do TypeScript
 ```
 
-## 🔌 Conexão com Backend
+## Scripts
 
-### URL da API
-
-O frontend se conecta ao backend através da variável de ambiente `NEXT_PUBLIC_BASE_URL` definida no arquivo `.env`.
-
-```env
-NEXT_PUBLIC_BASE_URL=http://localhost:8080
-```
-
-### Endpoints Consumidos
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/auth/signup` | Criar nova conta |
-| POST | `/auth/signin` | Fazer login |
-| POST | `/auth/reset-password` | Resetar senha |
-| GET | `/posts` | Listar posts (com paginação) |
-| GET | `/posts/liked` | Listar posts curtidos do usuário |
-| POST | `/posts/:id/like` | Curtir/descurtir um post |
-
-### Formato das Requisições
-
-#### Autenticação
-```typescript
-// Signup
-POST /auth/signup
-Body: { email: string, password: string }
-Response: { id: number, email: string }
-
-// Signin
-POST /auth/signin
-Body: { email: string, password: string }
-Response: { id: number, email: string }
-
-// Reset Password
-POST /auth/reset-password
-Body: { email: string }
-Response: void
-```
-
-#### Posts
-```typescript
-// Listar Posts
-GET /posts?userId=1&limit=10&skip=0
-Response: { posts: Post[], total: number, skip: number, limit: number }
-
-// Posts Curtidos
-GET /posts/liked?userId=1&limit=10
-Response: { posts: Post[], total: number, limit: number }
-
-// Curtir/Descurtir
-POST /posts/:id/like?userId=1
-Response: void
-```
-
-### Verificar Conexão
-
-Para verificar se o backend está rodando:
-
-```bash
-curl http://localhost:8080/posts?userId=0&limit=1
-```
-
-Se retornar dados, a conexão está funcionando! ✅
-
-## 🎨 Funcionalidades
-
-### Para Usuários Não Autenticados
-- ✅ Visualizar feed de posts
-- ✅ Criar conta
-- ✅ Fazer login
-- ✅ Recuperar senha
-
-### Para Usuários Autenticados
-- ✅ Todas as funcionalidades acima
-- ✅ Curtir/descurtir posts
-- ✅ Ver lista de posts curtidos
-- ✅ Fazer logout
-
-### Validações Implementadas
-
-**Email:**
-- Formato válido
-- Campo obrigatório
-
-**Senha:**
-- Mínimo de 8 caracteres
-- Pelo menos uma letra maiúscula
-- Pelo menos uma letra minúscula
-- Pelo menos um número
-- Pelo menos um caractere especial
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Next.js 15** - Framework React
-- **TypeScript** - Tipagem estática
-- **Axios** - Cliente HTTP
-- **React Context API** - Gerenciamento de estado
-- **Jest** - Framework de testes
-- **Testing Library** - Testes de componentes React
-- **CSS-in-JS** - Estilização inline com variáveis CSS
-
-## 📦 Scripts Disponíveis
-
-| Script | Comando | Descrição |
-|--------|---------|-----------|
-| Desenvolvimento | `npm run dev` | Inicia servidor de desenvolvimento |
-| Build | `npm run build` | Cria build de produção |
-| Start | `npm start` | Inicia servidor de produção |
-| Lint | `npm run lint` | Executa verificação de código |
-| Testes | `npm test` | Executa todos os testes |
-| Testes (watch) | `npm run test:watch` | Executa testes em modo watch |
-| Cobertura | `npm run test:coverage` | Gera relatório de cobertura |
+- `npm run dev`: inicia o servidor de desenvolvimento.
+- `npm run build`: gera o build de produção.
+- `npm start`: inicia o build de produção.
+- `npm run lint`: executa ESLint.
+- `npm test`: executa os testes.
+- `npm run test:watch`: executa testes em modo watch.
+- `npm run test:coverage`: executa testes com relatório de cobertura.

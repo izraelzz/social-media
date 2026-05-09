@@ -1,28 +1,19 @@
 # SQA Social Media API
 
-API REST desenvolvida em Spring Boot para gerenciamento de usuários e posts de uma rede social.
+API REST desenvolvida em Spring Boot que server como backend da aplicação. Ele gerencia autenticação, usuários, posts curtidos e integração com a API pública [DummyJSON](https://dummyjson.com/docs).
 
-## 📋 Sobre o Projeto
+## Visão Geral
 
-Este projeto é uma API backend que oferece:
-- **Autenticação de usuários** (signup, signin, reset password)
-- **Integração com DummyJSON** para buscar posts mockados
-- **Sistema de curtidas** em posts
-- **Gerenciamento de posts curtidos** por usuário
+- Java 17
+- Spring Boot 3.4
+- Spring Web
+- Spring Data JPA
+- MySQL em desenvolvimento
+- Maven
 
-A aplicação consome dados de posts da API pública [DummyJSON](https://dummyjson.com/docs) e armazena apenas as curtidas dos usuários no banco de dados.
+A API roda por padrão em `http://localhost:8080`.
 
-## 🛠️ Tecnologias Utilizadas
-
-- **Java 17**
-- **Spring Boot 3.4.4**
-- **Spring Web** - Para criação de APIs REST
-- **Spring Data JPA** - Para persistência de dados
-- **MySQL** - Banco de dados relacional
-- **Jackson** - Para parsing de JSON
-- **Maven** - Gerenciador de dependências
-
-## 📦 Dependências
+## Dependências
 
 As principais dependências do projeto (definidas no `pom.xml`):
 
@@ -67,7 +58,7 @@ As principais dependências do projeto (definidas no `pom.xml`):
 </dependency>
 ```
 
-## 🗄️ Banco de Dados
+## Banco de Dados
 
 ### MySQL (Configuração Padrão)
 
@@ -96,13 +87,12 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
-**Passo a passo:**
 1. Crie um banco de dados no MySQL
 2. Substitua `<SEU_BANCO_DE_DADOS>` pelo nome do banco
 3. Substitua `<SEU_USUARIO_DB>` pelo usuário do MySQL
 4. Substitua `<SUA_SENHA_DB>` pela senha do MySQL
 
-**Exemplo:**
+*Exemplo:*
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/social_media
 spring.datasource.username=root
@@ -145,7 +135,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
 
-**Exemplo:**
+*Exemplo:*
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/social_media
 spring.datasource.username=postgres
@@ -154,119 +144,70 @@ spring.datasource.password=postgres
 
 ### Outros Bancos de Dados
 
-O projeto pode ser facilmente adaptado para outros bancos. Exemplos:
+Verificar respectiva documentação
 
-**H2 (banco em memória para testes - já configurado no projeto):**
-```xml
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <scope>test</scope>  <!-- Apenas para testes -->
-</dependency>
-```
+## Como Rodar
 
-Para usar H2 em desenvolvimento também (opcional):
-```properties
-# src/main/resources/application-dev.properties
-spring.datasource.url=jdbc:h2:mem:devdb
-spring.datasource.driverClassName=org.h2.Driver
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-```
+Pré-requisitos:
 
-Execute com: `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
+- Java 17+
+- MySQL rodando
+- Maven ou o wrapper `./mvnw`
 
-**SQL Server:**
-```xml
-<dependency>
-    <groupId>com.microsoft.sqlserver</groupId>
-    <artifactId>mssql-jdbc</artifactId>
-    <scope>runtime</scope>
-</dependency>
-```
-```properties
-spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=social_media
-```
+Clone o repositório
 
-## Como Rodar o Projeto
-
-### Pré-requisitos
-
-- **Java 17** ou superior instalado
-- **Maven** instalado (ou use o wrapper `./mvnw`)
-- **MySQL** instalado e rodando (ou outro banco configurado)
-
-### Passos
-
-1. **Clone o repositório**
 ```bash
 git clone <url-do-repositorio>
 cd api
 ```
 
-2. **Configure o banco de dados**
+Execute:
 
-Edite o arquivo `src/main/resources/application.properties` com suas credenciais.
-
-3. **Instale as dependências**
-```bash
-./mvnw clean install
-```
-Ou no Windows:
-```bash
-mvnw.cmd clean install
-```
-
-4. **Execute a aplicação**
 ```bash
 ./mvnw spring-boot:run
 ```
-Ou no Windows:
+
+No Windows:
+
 ```bash
 mvnw.cmd spring-boot:run
 ```
 
-5. **Acesse a API**
+## Endpoints
 
-A aplicação estará rodando em: `http://localhost:8080`
+Autenticação:
 
-### Verificar se está rodando
+- `POST /auth/signup`
+- `POST /auth/signin`
+- `POST /auth/reset-password`
+
+Posts:
+
+- `GET /posts`
+- `GET /posts/liked`
+- `POST /posts/{postId}/like`
+
+*Exemplo:*
 
 ```bash
-curl http://localhost:8080/test
+curl "http://localhost:8080/posts?userId=1&limit=10&skip=0"
 ```
 
-## 📡 Endpoints Disponíveis
+## Testes
 
-### Autenticação
+Os testes da API usam H2 em memória por meio de `src/test/resources/application.properties`.
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/auth/signup` | Criar nova conta |
-| POST | `/auth/signin` | Login |
-| POST | `/auth/reset-password` | Resetar senha |
-
-### Posts
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/posts` | Buscar posts (home) |
-| GET | `/posts/liked` | Buscar posts curtidos |
-| POST | `/posts/{postId}/like` | Curtir/descurtir post |
-
-**Exemplos:**
 ```bash
-# Buscar posts
-GET http://localhost:8080/posts?userId=1&limit=10&skip=0
-
-# Posts curtidos
-GET http://localhost:8080/posts/liked?userId=1&limit=5
-
-# Curtir post
-POST http://localhost:8080/posts/1/like?userId=1
+./mvnw test
 ```
 
-## 📁 Estrutura do Projeto
+Para rodar um teste específico:
+
+```bash
+./mvnw test -Dtest=UserServiceTests
+```
+
+## Estrutura do Projeto
 
 ```
 api/
@@ -291,83 +232,8 @@ api/
 └── README.md                               # Documentação
 ```
 
-### 🧪 Diretório de Testes
+## Referências
 
-O projeto inclui testes unitários que servem como exemplo para os alunos expandirem a cobertura de testes:
-
-#### Testes Existentes:
-
-- **`test/java/com/demoapp/demo/DemoApplicationTests.java`**
-  - Testa se o contexto da aplicação Spring Boot carrega corretamente
-  - Teste básico de "smoke test"
-  
-- **`test/java/com/demoapp/demo/service/UserServiceTests.java`**
-  - Testes unitários do `UserService`
-  - Exemplos de validação de email e senha
-  - Usa `@SpringBootTest` para carregar contexto completo
-
-#### Configuração de Testes:
-
-- **`test/resources/application.properties`**
-  - Configuração específica para testes
-  - Usa banco H2 em memória (não precisa de MySQL)
-  - Banco é criado e destruído automaticamente
-
-## 🧪 Executando Testes
-
-O projeto inclui testes unitários como base para os alunos expandirem. Os testes **usam H2 em memória** automaticamente (não precisa de MySQL).
-
-### Executar todos os testes
-```bash
-./mvnw test
-```
-Ou no Windows:
-```bash
-mvnw.cmd test
-```
-
-### Executar um teste específico
-```bash
-./mvnw test -Dtest=UserServiceTests
-```
-
-### Executar testes em modo "watch" (reexecuta ao salvar)
-```bash
-./mvnw spring-boot:test-run
-```
-
-### 📊 Banco H2 para Testes (Já Configurado)
-
-O projeto **já está configurado** para usar H2 em memória nos testes! 
-
-**Arquivo:** `src/test/resources/application.properties`
-```properties
-spring.application.name=demo
-
-# Banco H2 em memória para testes
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-
-# Hibernate
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
-```
-
-**Vantagens:**
-- ✅ Testes rodam **sem precisar de MySQL instalado**
-- ✅ Banco criado e destruído automaticamente a cada teste
-- ✅ Execução **rápida** (tudo em memória)
-- ✅ **Isolamento completo** entre testes
-
-**Como funciona:**
-- Produção (rodar app): Usa MySQL configurado em `src/main/resources/application.properties`
-- Testes: Usa H2 em memória configurado em `src/test/resources/application.properties`
-
-## 📚 Referências
-
-- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+- [Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [DummyJSON API](https://dummyjson.com/docs)
+- [DummyJSON](https://dummyjson.com/docs)
