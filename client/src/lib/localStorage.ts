@@ -7,7 +7,7 @@ export interface StoredUser {
 
 export function saveUser(user: StoredUser): void {
   if (typeof window !== "undefined") {
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user)); // Deveria ser USER_KEY em vez de "user"
   }
 }
 
