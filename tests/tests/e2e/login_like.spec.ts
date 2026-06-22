@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 const BASE = 'http://localhost:3000';
 
-test('login and like flow with and without authentication', async ({ page }) => {
-  const email = `e2e.login.${Date.now()}@example.com`;
+test('fluxo de login e curtida com e sem autenticação', async ({ page }) => {
+  const email = `testuser.${Date.now()}@example.com`;
   const password = 'FakePassword@123';
 
-  // Cria usuário
+  // Fluxo de cadastro
   await page.goto(`${BASE}/signup`);
 
   const signupEmail = page.locator('input[type="email"]');
@@ -19,8 +19,10 @@ test('login and like flow with and without authentication', async ({ page }) => 
 
   await expect(signupEmail).toHaveValue(email);
 
-  await page.getByPlaceholder('••••••••').first().fill(password);
-  await page.getByPlaceholder('••••••••').nth(1).fill(password);
+  const passwordInputs = page.locator('input[type="password"]');
+
+  await passwordInputs.first().fill(password);
+  await passwordInputs.nth(1).fill(password);
 
   await page
     .getByRole('main')
@@ -34,7 +36,7 @@ test('login and like flow with and without authentication', async ({ page }) => 
   // Logout
   await page.getByRole('button', { name: 'Sair' }).click();
 
-  // Tenta curtir sem autenticação
+  // Curtir sem autenticação
   const firstPost = page.getByRole('listitem').first();
 
   page.once('dialog', async dialog => {
@@ -61,7 +63,7 @@ test('login and like flow with and without authentication', async ({ page }) => 
 
   await expect(signinEmail).toHaveValue(email);
 
-  await page.getByPlaceholder('••••••••').fill(password);
+  await passwordInputs.first().fill(password);
 
   await page
     .getByRole('main')
@@ -72,7 +74,7 @@ test('login and like flow with and without authentication', async ({ page }) => 
     page.getByRole('button', { name: 'Sair' })
   ).toBeVisible({ timeout: 10000 });
 
-  // Curtir autenticado
+  // Curtir com autenticação
   const authenticatedPost = page.getByRole('listitem').first();
 
   await expect(authenticatedPost).toBeVisible();
