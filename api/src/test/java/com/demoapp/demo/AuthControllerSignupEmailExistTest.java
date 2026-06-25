@@ -37,7 +37,7 @@ public class AuthControllerSignupEmailExistTest {
         assertEquals(409, response.getStatusCode().value());
 
         assertEquals(
-            "E-mail já cadastrado",
+            "E-mail já está em uso",
             body.getMessage()
         );
     }
