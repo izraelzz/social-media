@@ -67,10 +67,16 @@ jobs:
           chmod +x mvnw
           ./mvnw -q -DskipTests spring-boot:run > api.log 2>&1 &
 
-      - name: Start client server
+      - name: Start API server
         run: |
-          cd client
-          npm run start > client.log 2>&1 &
+          cd api
+          chmod +x mvnw
+          ./mvnw -q -DskipTests spring-boot:run > api.log 2>&1 &
+
+      - name: Show API logs
+        run: |
+          sleep 20
+          cat api/api.log
 
       - name: Wait for services
         run: |
