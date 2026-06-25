@@ -45,6 +45,7 @@ jobs:
           cd api
           chmod +x mvnw
           ./mvnw -q test
+          pkill -f java || true
 
       - name: Install client dependencies
         run: |
