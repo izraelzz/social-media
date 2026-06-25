@@ -10,6 +10,7 @@ describe("Testes PostCard", () => {
           title: "Título",
           body: "Conteúdo",
           liked: false,
+          reactions: { likes: 10, dislikes: 2 },
         }}
         isAuthenticated={true}
         onLike={jest.fn()}
@@ -18,5 +19,7 @@ describe("Testes PostCard", () => {
 
     expect(screen.getByText("Título")).toBeTruthy();
     expect(screen.getByText("Conteúdo")).toBeTruthy();
+    expect(screen.getByText("👍 10")).toBeTruthy();
+    expect(screen.getByText("👎 2")).toBeTruthy();
   });
 });

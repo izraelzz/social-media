@@ -39,6 +39,7 @@ describe("Testes LikedPosts page", () => {
           title: "Título 1",
           body: "Conteúdo 1",
           liked: true,
+          reactions: { likes: 5, dislikes: 0 },
         },
       ],
       total: 1,

@@ -38,6 +38,10 @@ test('fluxo de login e curtida com e sem autenticação', async ({ page }) => {
 
   // Curtir sem autenticação
   const firstPost = page.getByRole('listitem').first();
+  const firstLikeButton = firstPost.getByRole('button', { name: /Curtir|Curtido/ });
+
+  await expect(firstPost).toBeVisible({ timeout: 15000 });
+  await expect(firstLikeButton).toBeVisible({ timeout: 15000 });
 
   page.once('dialog', async dialog => {
     expect(dialog.message()).toBe(
@@ -46,9 +50,7 @@ test('fluxo de login e curtida com e sem autenticação', async ({ page }) => {
     await dialog.accept();
   });
 
-  await firstPost
-    .getByRole('button', { name: /Curtir|Curtido/ })
-    .click();
+  await firstLikeButton.click();
 
   // Login
   await page.goto(`${BASE}/signin`);

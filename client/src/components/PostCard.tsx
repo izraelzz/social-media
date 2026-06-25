@@ -16,6 +16,7 @@ export default function PostCard({
 }: PostCardProps) {
   const [liked, setLiked] = useState(post.liked);
   const [isLoading, setIsLoading] = useState(false);
+  const reactions = post.reactions ?? { likes: 0, dislikes: 0 };
 
   async function handleLike() {
     if (!isAuthenticated) {
@@ -80,11 +81,25 @@ export default function PostCard({
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
           marginTop: "1rem",
+          gap: "1rem",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            color: "var(--foreground)",
+            opacity: 0.85,
+            fontSize: "0.95rem",
+          }}
+        >
+          <span>👍 {reactions.likes}</span>
+          <span>👎 {reactions.dislikes}</span>
+        </div>
+
         <button
           onClick={handleLike}
           disabled={isLoading}
