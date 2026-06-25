@@ -56,11 +56,13 @@ public class PostService {
       for (JsonNode postNode : postsArray) {
         Map<String, Object> post = new HashMap<>();
         Long postId = postNode.get("id").asLong();
+        int reactionsCount = postNode.has("reactions") ? postNode.get("reactions").asInt() : 0;
         
         post.put("id", postId);
         post.put("title", postNode.get("title").asText());
         post.put("body", postNode.get("body").asText());
         post.put("liked", likedPostIds.contains(postId));
+        post.put("reactions", Map.of("likes", reactionsCount, "dislikes", 0));
         
         posts.add(post);
       }
@@ -103,11 +105,13 @@ public class PostService {
         String response = restTemplate.getForObject(url, String.class);
         JsonNode postNode = objectMapper.readTree(response);
         
+        int reactionsCount = postNode.has("reactions") ? postNode.get("reactions").asInt() : 0;
         Map<String, Object> post = new HashMap<>();
         post.put("id", postNode.get("id").asLong());
         post.put("title", postNode.get("title").asText());
         post.put("body", postNode.get("body").asText());
         post.put("liked", true);
+        post.put("reactions", Map.of("likes", reactionsCount, "dislikes", 0));
         
         posts.add(post);
       }
